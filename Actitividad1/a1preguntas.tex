@@ -1,0 +1,181 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 1}	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#1: Sobre la atmósfera}\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+\section{Resumen}
+El presente trabajo es una pequeña recolección de las características de la atmósfera (sus capas), parámetros de interés (relativos a temperatura y humedad), instrumentos de medición (se hace referencia a globos meteorológicos y las herramientas que carga) y una pequeña muestra de datos de temperatura y presión para Empalme, Sonora. 
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+Este trabajo se realiza con el objetivo de usar LaTeX pero con el objetivo especifico de recabar información sobre la atmósfera, ordenándola de forma clara e informativa. Sin embargo cabe recalcar que el análisis de la atmósfera es interesante ya que esta presenta diversas propiedades que están dadas por las características de cada una de sus capas, así como de su interacción con el planeta.\\
+
+Así mismo, cabe destacar la importancia de la atmósfera ya que es la característica relevante de la tierra que la hace capaz de albergar vida. Por ende su estudio, aunque sea para este caso bastante superficial permite comenzar a visualizar las complicaciones de su estudio, y quizás lo afortunado que somos de tenerla. \\
+
+El trabajo se separo el desarrollo en una introductorio donde se abarcan las capas de la atmósfera y donde se habla de las relaciones temperatura-altura y presión-altura. En la primera subsección parte se contemplan parámetros mas específicos de la atmósfera (referentes a la humedad y temperatura). En la siguiente se contempla el globo meteorológico y posibles instrumentos que este puede cargar. En la ultima parte del desarrollo se graficán datos de temperatura-altura y presión-altura para Empalme Sonora al 26 de enero del 2017. Por ultimo se presenta una pequeña sección se conclusiones.
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+\section{Sobre la atmósfera}
+
+La atmósfera tiene 4 capas que son\cite{a}:
+
+\begin{itemize}
+\item Troposfera: Es la capa mas baja de la atmósfera donde los seres vivos terrestres viven y donde se da el clima. La temperatura de esta capa disminuye al aumentar la altura. 
+\item La frontera entre la troposfera y estratosfera se llama tropopausa. 
+\item Estratosfera: esta entre los 30 y 50 km de altitud, a diferencia de en la troposfera en esta capa la temperatura aumenta junto con la altura; ya que en esta se encuentra la capa de ozono que tiene la propiedad de absorber los rayos ultravioletas del sol.
+\item Mesosfera: Esta capa es similar a la troposfera ya que la temperatura disminuye con la altura y contiene proporciones similares de nitrógeno y oxigeno, aunque estas son mil veces menores y hay poco vapor de agua. Por este ultimo punto, el aire es demasiado delgado, lo cual no permite la presencia del clima.
+\item  Termosfera o ionosfera: es la capa mas alta de la atmosfera, en esta capa la temperatura se incrementa con la altura ya que esta es directamente calentada por el sol.
+\end{itemize}
+
+En la siguiente imagen se pueden observar las capas de la atmósfera:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=10cm]{atm}
+	\caption{Capas de la atmósfera \cite{a}}
+\end{figure}
+
+Así mismo, la figura 1 muestra los cambios de la temperatura contra la altura, se puede observar como el comportamiento es lineal principalmente en la troposfera y cambia no linealmente conforme aumenta la altura. Esto sucede ya que las moléculas que conforman la atmósfera son mas vulnerables a la fuerza de gravedad conforme están mas cerca de la tierra, lo que significa que esta se concentra mas en la superficie terrestre y se hace mas delgada conforme aumenta la altura\cite{a}. Lo anterior a su ves significa que a mayor altura hay menor cantidad de moléculas sobre ti, lo que resulta en una menor presión\cite{a}. La siguiente imagen muestra la relación presión-altura:\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=10cm]{pres}
+	\caption{Presión contra altura \cite{a}}
+\end{figure}
+
+\subsection{Forma de medición de las propiedades de la atmósfera}
+
+En esta sección se contemplan parámetros mas complejos para la determinación de características/propiedades de la atmósfera, específicamente sobre humedad y temperatura.
+
+\subsubsection{Humedad}
+ Para medir la humedad se tienen distintos indicadores que son:
+ \begin{itemize}
+ \item Razón de mezcla ($W$): es la razón entre la masa de vapor-agua $M_{v}$ y la masa de aire seco $M_{d}$\cite{f}. Se obtiene:
+ $$ W = \frac{M_{v}}{M_{d}} $$
+ \item Razón de mezcla de saturación ($W_{s}$):  es la razón entre la masa de vapor-agua $M_{v}$ y la masa de aire seco $M_{d}$ en un parcel de aire saturado sin condensarse\cite{f}. Se calcula:
+  $$ W_{s} = \frac{M_{v}}{M_{d}} $$
+  \item Humedad relativa (RH): es la razón, en porcentaje, de la cantidad de agua-vapor en un volumen dado de aire en relación a la cantidad que ese volumen de aire puede contener si estuviera saturado\cite{f}. Se calcula como la proporción de mezcla entre la razón de mezcla de saturación, como se puede observar\cite{f}
+  $$ RH = 100*\frac{W}{W_{s}} $$
+  \item Presión de vapor: es la parte de la presión atmosférica que se le puede atribuir al vapor de agua\cite{f}.
+ \end{itemize}
+
+\subsubsection{Temperatura}
+La temperatura se puede medir a través de los siguientes indicadores:
+
+\begin{itemize}
+\item Temperatura virtual ($T_{v}$): es la temperatura a la cual el aire seco tendría la misma densidad que el aire húmedo, a una cierta presión, es decir, dos muestras de aire con la misma densidad sin considerar su temperatura o humedad\cite{f}.
+\item Temperatura potencial ($\theta$): es la temperatura que una muestra de aire tendría si es sometida a una presión de 1000 hPa (seca y adiabáticamene)\cite{f}.
+\item Temperatura equivalente (Te): es la temperatura de una muestra de aire a un cierto nivel de presión tendría si su humedad fuera condensada con un proceso pseudoadiabático\cite{f}.
+\item Temperatura potencial equivalente ($\theta_{e}$): es la temperatura de una muestra de aire a un cierto nivel de presión tendría si su humedad fuera condensada con un proceso pseudoadiabático y luego es sometida a una presión de 1000 hPa (seca y adiabáticamene)\cite{f}.
+\item Temperatura conectiva ($T_{c}$): es la temperatura de la superficie que se debe alcanzar para empezar la formación de nubes conectivas (que son causadas por el calor del sol en la troposfera\cite{f}.
+
+\end{itemize}
+
+
+
+\subsection{Instrumentos de medición de las propiedades de la atmósfera}
+
+Una de las formas de medición de las propiedades de la atmósfera es a través del uso de un "globo sonda o globo meteorológico" que carga instrumentos encargados de enviar informacion acerca de la presion atmosferica, humedad, velocidad del viento, temperatura, etcetera \cite{b}. Algunos de los instrumentos que este carga son:\\
+
+\begin{itemize}
+\item Radiosonda: instrumento, cargado con batería, que de ser moderno puede medir la altitud, temperatura, humedad, velocidad y dirección del viento, rayos cósmicos entrando en altas alturas y posición geográfica (latitud y longitud)\cite{c}. Como su nombre lo indica, el instrumento envía la información a través de ondas de radio.
+\item Sistemas de navegación: el sistema de posicionamiento global (GPS por sus siglas en ingles) es un herramienta que permite determinar la posición de un objeto en cualquier punto de la tierra\cite{d}. Usándolo es posible inferir la velocidad del viento (a través del movimiento del globo) asi como la latitud y longitud del globo.
+\item Radiogoniometría o Búsqueda por Radio Dirección: es la forma de estudio de la dirección de emisión de un señal\cite{e}. 
+\end{itemize}
+
+\subsection{Mediciones de temperatura y presión contra altura en Empalme Sonora al 26 de enero del 2017}
+
+En esta sección se graficaron mediciones de temperatura y presión contra altura para Empalme, Sonora, México del 26 de enero 2017. La figura 3 muestra la relación de temperatura contra altura.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=10cm]{temp}
+	\caption{Temperatura contra altura en Empalme. Datos de\cite{g}}
+\end{figure}
+
+Comparando con la figura 1 se observa que entre los 10 mil y 15 mil metro el comportamiento de la temperatura parece lineal; entre los 10 mil y 25 mil cuadrático; y relativamente se mantiene a partir de los 25 mil metros.\\
+
+En la figura 4, se gráfico la presión contra altura. El comportamiento observado es muy similar al de la figura 2.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=10cm]{press}
+	\caption{Presión contra altura en Empalme. Datos de\cite{g}}
+\end{figure}
+
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+El comportamiento de la presión contra la altura es en una primera instancia mas fácil de apreciar que el de la temperatura, esto es coherente con las características que cada capa de la atmósfera tiene (lo que las diferencia en su capacidad de absorción de calor) mientras la presión siguiendo la fuerza de gravedad tiene un comportamiento mas sencillo de apreciar. 
+
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+\bibitem{a} \url{http://climate.ncsu.edu/edu/k12/.AtmStructure}
+\bibitem{b} \url{https://en.wikipedia.org/wiki/Weather_balloon}
+\bibitem{c} \url{https://en.wikipedia.org/wiki/Radiosonde}
+\bibitem{d} \url{https://es.wikipedia.org/wiki/Sistema_de_posicionamiento_global}
+\bibitem{e} \url{https://en.wikipedia.org/wiki/Direction_finding}
+\bibitem{f} \url{http://www.meted.ucar.edu/mesoprim/skewt/navmenu.php?tab=2&page=1.0.0&type=flash}
+\bibitem{g} \url{http://weather.uwyo.edu/cgi-bin/sounding?region=naconf&TYPE=TEXT%3ALIST&YEAR=2017&MONTH=01&FROM=2612&TO=2612&STNM=76256}
+\end{thebibliography}
+
+
+\end{document}
