@@ -1,0 +1,297 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 3: Comienzos con Python y limpieza de datos}	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#3: Python y limpieza de datos}\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+
+\begin{abstract}
+
+La actividad 3  trata sobre la limpieza de datos y su manejo usando Python. En especifico se obtuvieron las observaciones disponibles de la Energía Potencial Conectiva Disponible (CAPE, por sus siglas en ingles) y la precipitación del agua (PW) para la estación meteorológica de la Paz, Baja California en el 2016, y se extrajo información de estas (visual y gráfica) usando Python.
+
+\end{abstract}
+
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+
+Primero que nada se considera relevante definir brevemente las variables alrededor de las cuales se centrara este trabajo que son:
+
+\begin{itemize}
+\item CAPE es "... la cantidad de energía que un parcel de aire tendría si se levantara una cierta distancia verticalmente a través de la atmósfera"\cite{a}.
+\item PW es "... es la profundidad del agua en una columna de la atmósfera, si esta fuera precipitada como la lluvia, su unidad es en milímetros o pulgadas"\cite{b}.
+\end{itemize}
+
+CAPE es un indicador de inestabilidad atmosférica, que es util para predecir clima severo\cite{a}. De acuerdo a \cite{b} PW se puede usar para calcular indirectamente la humedad. \\
+En este trabajo se obtendrán las observaciones que existe de estas de variables para el año 2016, se limpian y se procesan sencillamente con Python.
+ 
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+\section{Desarrollo}
+
+\subsection{Limpieza de datos}
+
+Para la limpieza de datos primeramente se uso Linux/Bash, primero se extrajo las variables de interés del archivo "sondeos.txt" en el cual se tienen todas las variables que el sitio de la Universidad de Wyoming\cite{c}. Para esto se uso el comando (en la terminal de Linux):
+
+\begin{verbatim}
+cat sondeos.txt |egrep -i "Observations|CAPE|precipitable"| sed -i "00Z,2d" > 12Z.txt
+\end{verbatim}
+
+El cual se encarga primero de considerar el archivo sondeos.txt, luego ubicar las palabras "Observations" (para la fecha), "CAPE" para CAPE y "precipitable" para PW, note que espacios y mayúsculas cuentan. La ultima parte se encarga de filtrar todos los valores que no tengan la 00Z horas de Greenwich y las pone en un archivo, en este caso 12Z por que es la hora de interés.\\
+
+Luego se procede a buscar si existen otras horas que no son las 12Z, esto se hace a través de:
+
+\begin{verbatim}
+grep 00Z 12Zcape.txt
+grep 08Z 12Zcape.txt
+grep 09Z 12Zcape.txt
+\end{verbatim}
+ 
+Que se encarga de buscar valores distintos a las 12Z, pero no se encontró ninguno.\\
+Una vez que el archivo contenía solo la hora y variables de interés, se paso a usar emacs para eliminar texto sobrantes. Esto se hizo a través del comando "query-replace" al cual se accede aplastando "Esc-x" en emacs y luego escribiendo "query-replace".\\
+
+El proceso es el siguiente, primero se selecciona el texto que se desea eliminar, preferentemente uno que se repita en el texto, se copea con la interfaz o con "Alt-w". Luego se accede a la terminal de emacs "Esc-x" y se escribe "query-replace", se aplasta "enter". Una ver hecho esto te aparece el texto que se desea elimanar, se selecciona pegando con la interfaz o con "Ctrl-y", se aplasta enter y te pregunta emacs si deseas sustituirlo con algo, en caso de requerirlo se escribe y se aplasta enter. Por ultimo se confirma la orden con el signo "!".\\
+
+Se repite este proceso tres veces hasta que los datos queden como se ve la siguiente tabla:
+\begin{table}[H]
+\centering
+\begin{tabular}{|ccc|}
+\hline
+Fecha,& CAPE,& PW\\
+01 Jan 2016,&	0,&	21.79\\
+02 Jan 2016,&	0,&	23.06\\
+03 Jan 2016,&	0,&	17.56\\
+04 Jan 2016,&	2.18,&	17.32\\
+06 Jan 2016,&	0,&	19.05\\
+\vdots,& \vdots,& \vdots\\
+\hline
+\end{tabular}
+\caption{Estructura de los datos}
+\end{table}
+
+Note que se incluyo una coma y un espacio entre los datos.
+
+
+\subsection{Comienzos con Python}
+
+Una vez que se obtuvieron solo los datos CAPE y PW con sus fechas correspondientes se procedió a nombrar al archivo con una extensión "csv", el cual es usado en Python. Primero se le dijo a Python las librerías necesarias, a través del siguiente comando: \\
+
+\begin{verbatim}
+import pandas as pd
+import numpy as np
+import matplotlib as plt
+\end{verbatim}
+
+Seguido, se le dijo a Python donde se ubica el archivo en cuestión, que para este caso fue:\\
+
+\begin{verbatim}
+df = pd.read_csv ("/home/.../12Z.csv")
+\end{verbatim}
+
+Para comprobar que el archivo es el correcto se da el siguiente comando:\\
+
+\begin{verbatim}
+df.head(20)
+\end{verbatim}
+
+Que muestra las primeras 20 observaciones, el resultado fue:\\\
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=7cm]{uno}
+\end{center}
+\caption{Archivo}
+\end{figure}
+
+Luego se aplico un comando para describir las variables en cuestion, a traves del comando:\\
+
+\begin{verbatim}
+df.describe()
+\end{verbatim}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{dos}
+\end{center}
+\caption{Indicadores para CAPE y PW}
+\end{figure}
+
+Cabe denotar que la variable CAPE presento muchas observaciones en 0. Luego se procedió a limpiar los datos, primero intentando ubicar el numero de archivos "NA" o sin valores, mediante:
+
+\begin{verbatim}
+df.apply(lambda x: sum(x.isnull()),axis=0)
+\end{verbatim}
+
+El resultado fue 0 observaciones NA, es decir, que de las 199 valores de cada variable, todos eran medidas tomadas. Se aplico el comando para limpiar pero, obviamente, no hubo cambios. Seguido se paso a graficar, comenzando con el siguiente comando:
+
+\begin{verbatim}
+%matplotlib inline
+\end{verbatim}
+
+Que permite mostrar las gráficas en el mismo archivo de Python, de otra manera se harían en otra ventana. Luego se pasa a preguntar por el nombre de las variables con:
+\begin{verbatim}
+df.columns
+\end{verbatim}
+El resultado fue " Fecha", " CAPE", " PW", es decir que las variables tienen un espacio antes de su nombre. Pero dado que no se considero una molestia significante. Procedió el proceso de graficación a través de:
+
+\begin{verbatim}
+df_clean[' CAPE'].hist(bins=100)
+\end{verbatim}
+
+El resultado fue el siguiente histograma para CAPE, donde se puede observar que la variable esta fuertemente distribuida en el valor de 0. Este histograma es observable en la siguiente figura:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{tres}
+\end{center}
+\caption{Histograma de CAPE}
+\end{figure}
+
+Luego se paso a hacer un diagrama de caja con el siguiente comando:
+
+
+\begin{verbatim}
+df.boxplot(column=' CAPE', return_type='axes')
+\end{verbatim}
+
+Resultando en la siguiente figura:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{cuatro}
+\end{center}
+\caption{Diagrama de caja de CAPE}
+\end{figure}
+
+Seguido se procedió a intentar graficar un diagrama de caja para cada mes del año, para ello primero se creo una variable de mes con:
+
+\begin{verbatim}
+df['month']=pd.DatetimeIndex(df[' Fecha']).month
+\end{verbatim}
+
+Definiendo a enero como 1, febrero como 2, y así sucesivamente para los demás meses. Luego se procedio a realizar la gráfica con:
+
+\begin{verbatim}
+df.boxplot(column=' CAPE', by= 'month', return_type='axes')
+\end{verbatim}
+
+Que resulto en:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{cinco}
+\end{center}
+\caption{Diagrama de caja por mes de CAPE}
+\end{figure}
+
+Luego se procedió a realizar los mismos comando para PW, que al no tener tantos valores en 0, resulto en gráficas mas cambiantes. Como se puede observar a continuación (ya que se repitieron los comandos se agruparan en el siguiente párrafo.
+
+
+\begin{verbatim}
+df_clean[' PW'].hist(bins=100)
+df.boxplot(column=' PW', return_type='axes')
+df.boxplot(column=' PW', by= 'month', return_type='axes')
+\end{verbatim}
+
+El histograma se observa en la siguiente figura:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{seis}
+\end{center}
+\caption{Histograma de PW}
+\end{figure}
+
+Como se puede observar las observaciones de PW no están concentradas como en el caso de CAPE, hecho que se reafirma en las siguientes gráficas.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{siete}
+\end{center}
+\caption{Diagrama de caja de PW}
+\end{figure}
+
+Tanto el histograma por mes como el anual siguieren un valor medio de PW de alrededor de 25, ademas, es interesante ver los cambios mensuales de la misma que parecen tener un comportamiento ondulatorio.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=5cm]{ocho}
+\end{center}
+\caption{Diagrama de caja por mes de PW}
+\end{figure}
+
+
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+Primero que nada el uso de bash/linux para la extracción de datos resulto bastante útil, en especial cuando se considera la magnitud de los datos que se ignoran. Permitiendo concentrarse solo en las variables de interés.\\
+También el uso de emacs para la limpieza de datos resulto bastante efectivo, ya que permite quitar valores repetido que no son necesarios para el presente estudio.\\
+Por ultimo Python resulto mucho mas sencillo de usar de lo esperado, aunque bien es solo un comienzo, es bastante claro.\\
+
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+\bibitem{a} Convective available potential energy, Wikipedia: \url{https://en.wikipedia.org/wiki/Convective_available_potential_energy}
+\bibitem{b} Precipitable water. Wikipedia: \url{https://en.wikipedia.org/wiki/Precipitable_water}
+\bibitem{c} Departament of Atmospheric Science, University of Wyoming \url{http://weather.uwyo.edu/upperair/sounding.html}
+
+\end{thebibliography}
+
+
+\end{document}
