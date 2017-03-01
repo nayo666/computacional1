@@ -1,0 +1,367 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 4: Graficando con Python}	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#4: Graficando con Python}\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+
+\begin{abstract}
+
+Los datos usados en esta actividad corresponden al 21 de febrero del 2017 a las 12 horas Greenwich para la estación meteorológica de la Paz Baja California. La practica consiste en dos partes principalmente. La primera es graficar usando el modulo "matplotlib", que se uso para visualizar relaciones entre la presión y altura; la altura y temperatura; la altura y temperatura de roció (DWPT); y las ultimas dos gráficas juntas.  Para la segunda parte se uso la librería "tephi" para graficar un "tephigrama" que es una representación gráfica de las observaciones de temperatura, presión y humedad que se hacen a partir de muestreos atmosfericos \cite{f}, generalmente es usado para estudios meteorológicos.
+
+
+
+\end{abstract}
+
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+La interfaz virtual de python permite utilizar un gran numero de herramientas en la forma de módulos/librerías. En este caso solo nos enfocamos en el uso de los módulos gráficos matplotlib y tephi; estos tienen características distintas. Matplotlib es un modulo muy amplio que se encarga en general de realizar gráficos mientras tephi es muy especifico para el tipo de resultado.\\
+
+Para esta actividad se usaron las variables de altura, presión, temperatura y DWPT para el 21 de febrero del 2017 a las 12 horas Greenwich para la estación meteorológica de la Paz Baja California obtenidos en \cite{c}. Antes de ser utilizados en el ambiente grafico, se limpiaron de irregularidades usando emacs (principalmente el comando query-replace).\\
+
+Una vez que los datos se encontraron limpios (separados por coma o coma y espacio), se paso a usar matplotlib para graficar la presión contra altura; la altura contra temperatura; la altura contra temperatura de roció (DWPT); y temperatura y DWPT contra altura.\\
+Para el caso del modulo tephi se encontró el problema de que su funcionamiento/código esta dirigido para python 2 por lo que se hizo uso de una computadora personal para su uso.\\
+Como se menciono anteriormente un "tephigrama" es una representación gráfica de las observaciones de temperatura, presión y humedad que se hacen a partir de muestreos atmosfericos \cite{f}, generalmente es usado para estudios meteorológicos. Las axis en este son temperatura (T) y entropia ($\theta$) \cite{g}.
+
+
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+\section{Desarrollo}
+
+\subsection{Limpieza de datos}
+
+
+Para limpiar los archivos se uso emacs y su comando "query replace" buscando dejar las observaciones según los requerimientos de cada sub-sección.\\
+Para graficar sección 2.2 se dejaron todas las variables y observaciones para el 21 de febrero a las 12 horas Greenwich.\\
+Para el caso de tephigrama se crearon dos archivos uno con presión y temperatura solamente (separados por una coma) y otro con presión y el indicador DWPT (separados igualmente).\\
+
+
+\subsection{Graficando con Python}
+
+Primero se importaron las siguientes librerías, se agregaron y visualizaron las primeras observaciones. Como se ve en:
+\begin{verbatim}
+import pandas as pd
+import numpy as np
+import matplotlib as plt
+import matplotlib.pyplot as mplt
+%matplotlib inline
+
+df = pd.read_csv ("/home/lcoronado/computacional1/actividad4/12Z.csv")
+df.head(20)
+\end{verbatim}
+
+
+En la siguiente figura se ven las observaciones.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=7cm]{dos}
+\end{center}
+\caption{Archivo}
+\end{figure}
+
+Luego se describieron las variables con:
+
+\begin{verbatim}
+df.describe()
+\end{verbatim}
+
+Resultando en:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=6cm]{tres}
+\end{center}
+\caption{Estadísticos de los indicadores}
+\end{figure}
+
+Se busco si tenían datos no definidos (NA) con:
+
+\begin{verbatim}
+df.apply(lambda x: sum(x.isnull()),axis=0)
+\end{verbatim}
+
+Y no se encontró ninguno como se puede ver en las siguiente figura:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=4cm]{cuatro}
+\end{center}
+\caption{Datos no definidos}
+\end{figure}
+
+Luego se verifico el nombre de las variables con:
+
+\begin{verbatim}
+df.columns
+\end{verbatim}
+
+Que resulto en:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=1.5cm]{cinco}
+\end{center}
+\caption{Títulos de las variables}
+\end{figure}
+
+Para graficar presión contra altura se uso el siguiente código:
+
+\begin{verbatim}
+#Presión (hPa) vs. Altura (m)
+y = df[' HGHT']
+x = df[' PRES']
+mplt.plot(x, y)
+mplt.ylabel('Altura (m)')
+mplt.xlabel('Presión (hPa)')
+mplt.title('Presión vs. Altura')
+\end{verbatim}
+
+Que resulto en:
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=9cm]{seis}
+\end{center}
+\caption{Presión (hPa) vs. Altura (m)}
+\end{figure}
+
+Para el de temperatura contra altura el código es:
+\begin{verbatim}
+#Temperatura (C) vs. Altura (m)
+y = df[' HGHT']
+x = df[' TEMP']
+mplt.plot(x, y)
+mplt.ylabel('Altura (m)')
+mplt.xlabel('Temperatura (C)')
+mplt.title('Temperatura vs. Altura')
+\end{verbatim}
+
+Cuya gráfica es:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=9cm]{siete}
+\end{center}
+\caption{Temperatura (C) vs. Altura (m)}
+\end{figure}
+
+Para el caso de la temperatura de roció contra altura se uso:
+
+\begin{verbatim}
+#Temperatura de rocio (C) vs. Altura (m)
+y = df[' HGHT']
+x = df[' DWPT']
+mplt.plot(x, y)
+mplt.ylabel('Altura (m)')
+mplt.xlabel('Temperatura de rocio (C)')
+mplt.title('Temperatura de rocio vs. Altura')
+\end{verbatim}
+
+Que resulto en:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=9cm]{ocho}
+\end{center}
+\caption{Temperatura de rocio (C) vs. Altura (m)}
+\end{figure}
+
+Por ultimo para graficar altura contra Temperatura/Temperatura de roció se recurrió a las siguientes ordenes:
+
+\begin{verbatim}
+y = df[' HGHT']
+x1 = df[' DWPT']
+x2 = df[' TEMP']
+
+mplt.title('Altura (m) vs. Temperatura/Temperatura de rocio (C)')
+mplt.ylabel('Altura (m)')
+mplt.xlabel('Temperatura/Temperatura de rocio (C)')
+
+mplt.grid(True)
+mplt.plot(x1,y,c='purple',label='Temperatura de rocio')
+mplt.plot(x2,y,c='red', label='Temperatura')
+mplt.legend(fancybox=True, shadow=True)
+\end{verbatim}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=9cm]{nueve}
+\end{center}
+\caption{Altura (m) vs. Temperatura/Temperatura de rocio (C)}
+\end{figure}
+
+
+\subsection{Tephigram}
+No me fue posible correr el modulo tephi en python 3, por lo que en mi computadora personal realice lo siguiente, primero instale múltiples python (buscando en especifico el 2) con este código\cite{b}:
+
+\begin{verbatim}
+sudo dnf install python33  # to get CPython 3.3
+sudo dnf install python34  # to get CPython 3.4
+sudo dnf install python26  # to get CPython 2.6
+sudo dnf install pypy pypy3 jython python35  # to get more at once
+\end{verbatim}
+
+Luego active la interface virtual para estos con \cite{a}:
+
+\begin{verbatim}
+conda create -n py27 python=2.7
+source activate py27
+conda install notebook ipykernel
+ipython kernel install --user
+\end{verbatim}
+
+Antes de esto tuve que instalar anaconda y activar el comando conda, para esto los refiero a \cite{d} y \cite{e}.
+Instale los modulos "os", "matplotlinb", "pandas" y "tephi" con:
+\begin{verbatim}
+python2 -m pip install scipy
+python2 -m pip install pandas
+python2 -m pip install tephi
+python2 -m pip install os
+python2 -m pip install matplotlinb
+\end{verbatim}
+
+
+Una vez instalado tephi y los demás módulos, se uso el siguiente código para graficar (desde la interface virtual de python 2 dentro de la carpeta del modulo tephi): 
+\begin{verbatim}
+#modulos
+import matplotlib.pyplot as plt
+import os.path
+import pandas as pd
+import tephi as tph
+
+#archivos
+dew_point = pd.read_csv("/home/noxd/computacional/a4/dews.csv", names=["PRES", "DWPT"])
+dry_bulb = pd.read_csv("/home/noxd/computacional/a4/temps.csv", names=["PRES", "TEMP"])
+
+#grafica
+tpg = tph.Tephigram()
+tpg.plot(dew_point)
+tpg.plot(dry_bulb)
+plt.show()
+\end{verbatim}
+
+Donde se puede observar que el cambio al código presentado en tephi fue el uso de panda para darle a tephi las variables que este gráfica.\\
+El resultado fue:
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=9cm]{tephi}
+\end{center}
+\caption{grafica con tephi}
+\end{figure}
+
+Y se puede decorar agregando lo siguiente al codigo:
+
+\begin{verbatim}
+#variables
+dews = pd.read_csv("/home/noxd/computacional/a4/dews.csv", names=["PRES", "DWPT"])
+temp = pd.read_csv("/home/noxd/computacional/a4/temps.csv", names=["PRES", "TEMP"])
+
+#graficando con detalles
+tpg = tp.Tephigram()
+#temperaturas
+tpg.plot(dews, label='Dew-point temperature', color='blue', linewidth=2, linestyle='--', marker='s')
+tpg.plot(temp, label='Temperature', color='red', linewidth=2, linestyle='--', marker='s')
+#iso
+tephi.ISOBAR_LINE.update({'color': 'purple', 'linewidth': 3, 'linestyle': '--'})
+tephi.WET_ADIABAT_LINE.update({'color': 'yellow', 'linewidth': 3, 'linestyle': '--'})
+
+plot.show()
+\end{verbatim}
+
+Que resulta en:
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=9cm]{tephi2}
+\end{center}
+\caption{grafica con tephi con detalles}
+\end{figure}
+
+
+
+Por ultimo, comparando con la gráfica de \cite{c} se ve:
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=8cm]{comp}
+\end{center}
+\caption{Comparación entre tephigramas}
+\end{figure}
+
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+Batalle tanto graficando en tephi que no tuve tiempo de estudiar de forma correcta la lectura de estos gráficos. Sin embargo me gusto la experiencia de tener que hacer uso de python en mi computadora personal ya que imagino que es relativamente común encontrarse con módulos desactualizados.\\
+Por otra parte se me hizo que puede ser muy útil usar la librería matplotlib para graficar.\\
+
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+
+\bibitem{a} \url{http://stackoverflow.com/questions/30492623/using-both-python-2-x-and-python-3-x-in-ipython-notebook}
+\bibitem{b} \url{https://developer.fedoraproject.org/tech/languages/python/multiple-pythons.html}
+\bibitem{c} Departament of Atmospheric Science, University of Wyoming \url{http://weather.uwyo.edu/upperair/sounding.html}
+\bibitem{d} \url{http://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment}
+\bibitem{e} \url{https://docs.continuum.io/anaconda/install}
+\bibitem{f} modulo tephi \url{http://tephi.readthedocs.io/en/latest/introduction.html}
+\bibitem{g} Tephigram. Wikipedia: \url{https://en.wikipedia.org/wiki/Tephigram}
+
+\end{thebibliography}
+
+
+\end{document}
