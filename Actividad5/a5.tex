@@ -1,0 +1,326 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 5: Mareas}	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#5: Mareas}\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+
+\begin{abstract}
+
+
+En la presente actividad se presenta primeramente información sobre las mareas, específicamente se abordan sus características, definiciones y constituyentes. En las siguientes dos secciones se grafican datos para diciembre del 2016 para Manzanillo y la Isla Mona usando Python.
+
+
+\end{abstract}
+
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+Ya que las siguientes actividades serán sobre los ajustes de datos se comienza a entrar en la temática de la marea. Primero describiendo características en especifico de estas. Para esta actividad se definen comienza a entrar en la temática.\\
+
+En este contexto la sección 2 describe los principales componentes de la marea. Primeramente se describen sus componentes principales a manera de introducción. Luego se mencionan sus características principales, seguido por definiciones de distintas mareas. Por ultimo se mencionan los principales constituyentes de la marea.\\
+
+En las siguientes dos secciones se presentan gráficas y parte de los códigos usados para graficar de la marea en Manzanillo, Colima, México (sección 3) y para la isla Mona, Puerto rico (sección 4). Para ambas se uso el mes de diciembre del 2016.\\
+Por ultimo se tiene una sección de conclusiones.\\
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+\section{Sobre las mareas}
+
+En general las mareas son causadas por la fuerza gravitazional de la luna y el sol, y por la rotación de la tierra \cite{a}. Entonces los cambios específicos en la marea (amplitud, frecuencia, entre otros), están dados por circunstancias particulares como lo son la posición del sol y la luna, la densidad del agua, la temperatura por capas de la misma, entre otros fenómenos \cite{a}.\\
+
+Los patrones de la marea varían dependiendo del lugar en el que se encuentre en general algunas tendencias que se pueden encontrar son: dos mareas altas y bajas al día, una marea alta y una baja al día, también existen mareas mixtas osea dos mareas de distinto tamaño al día \cite{a}.\\
+Como las mareas tienen comportamientos dependiendo del lugar se usan "Mareómetro" para medir regularmente este comportamiento, existen dos tipos de mareómetros, uno que usa ondas y otro que usa presión para medir la marea \cite{b}. Estas mediciones se comparan con el nivel promedio de la marea que es el promedio de uno o mas océanos de la tierra \cite{c}.\\
+
+\subsection{Características}
+
+Las etapas de cambio de la marea son las siguientes\cite{a}:
+\begin{itemize}
+\item La marea sube por algunas horas cubriendo la zona intermareal que se sitúa entre la marea alta y baja\cite{d}. A este periodo se le llama marea de inundación.
+\item Cuando el agua esta en su  punto máximo se llama marea alta.
+\item Tiene un periodo en el que esta bajando y muestra la zona intermareal, se llama marea fluyente. 
+\item Cuando deja de bajar se llama marea baja.
+\end{itemize}
+
+
+\subsection{Definiciones}
+De acuerdo a los niveles (mas alto a mas bajo) las mareas se definen como\cite{a}:
+
+\begin{itemize}
+\item Marea astronómica mayor (HAT por sus siglas en ingles): la marea mas alta predecible (factores climáticos pueden aumentarla).
+\item Marea ata promedio primaveral (MHWS): el promedio de las dos mareas altas del día en primavera.
+\item Marea muerta alta promedio (MHWN) es el promedio de dos mareas altas en días de marea muerta.
+\item Marea promedio del océano (MSL): es la marea promedio del mar. MSL es una constante por locación por periodos largos de tiempo.
+\item Marea muerta baja promedio (MLWN): es el promedio de dos mareas bajas en días de marea muerta.
+\item Marea baja promedio primaveral (MLWS): el promedio de las dos mareas bajas del día en primavera.
+\item Marea astronómica menor (LAT): la marea mas baja predecible (factores climáticos pueden aumentarla).
+\end{itemize}
+
+En la siguiente imagen se pueden observar las mareas descritas anteriormente:
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=8cm]{Tide_terms}
+	\caption{Definiciones de mareas \cite{a}}
+\end{figure}
+
+\subsection{Constituyentes de la marea}
+
+Los constituyentes de la marea son el resultado neto de varios factores que afectan a la marea por periodos de tiempo en especifico, los principales son la rotación de la tierra, la posición de la luna y el sol, la altitud de la luna con respecto al ecuador y factores relativos a la profundidad del mar \cite{a}.
+Variaciones con periodos menores a 12 horas se llaman armónicos constituyentes y para periodos largos se refieren como constituyentes a largo plazo \cite{a}.\\
+
+A continuación se mencionan los principales constituyentes\cite{a}:
+
+\begin{itemize}
+\item Constituyente principal lunar semi-diurno: comúnmente el constituyente mayor y conocido como M2. Con un periodo de 12 horas t 25.2 minutos (tiempo de una rotación relativa de la tierra con respecto a la luna), este periodo es en e que el campo gravitacional de la luna esta a su máximo y mínima distancia.
+\item Rango semi-diurno: es la diferencia entre agua alta y baja en medio día (un ciclo de dos semanas normalmente entre la luna nueva y llena).
+\item Marea primaveral: se refiere al punto mas alto de la marea.
+\item Marea muerta: cuando la marea esta en su punto mínimo.
+\item Altitud lunar: cuando la luna esta a su mínima altura (ápside) el rango aumenta y cuando esta a su máxima altura (apsis) el rango disminuye.
+\item Fase y amplitud: Como el constituyente M2 es el dominante en la mayoría de los lugares, etapas o fases de la marea es un concepto útil. La fase de la marea se mide de forma angular (2$\pi$ o 360$^{o}$ para un ciclo completo).
+\item Otros constituyentes: factores como el campo gravitacional solar, la inclinación del ecuador y el eje rotacional, la inclinación del plano de la órbita de la luna y la forma orbital de la tierra con el sol.
+\end{itemize}
+
+En la siguiente tabla se resumen los constituyentes principales semidiurnos\cite{a}:
+\begin{center}
+	\begin{longtable}{|p{2.7cm}|c|c|c|c|c|c|c|c|c|c|c|c|c}
+  	\hline
+Semi-diurno & Darwin & Periodo & Velocidad & \multicolumn{4}{c}{Coeficientes Doodson} & Doodson &  NOAA \\
+\hline
+Nombre & Simbolo & (hr) & ($^o$/hr) & $n_{1}$ (L) & $n_{1}$ (m) &	$n_{3}$ (y) &	$n_{4}$ (mp) & Número  & Orden\\
+\hline
+Principal lunar semi-diurno & $M_{2}$ & 	12.42 	& 28.98 &	2 & & & & 255.55 & 1\\
+Principal solar semi-diurno & $S_{2}$ & 12 &	30 &	2 &	2 &	-2 & & 273.555 & 2 \\
+Semi-diurno elíptico lunar mayor &
+ 	$N_{2}$ &	12.66 &	28.44 &	2 &	-1 & &		1 &	245.655 & 3 \\
+    \hline
+\caption{Constituyentes principales semidiurnos}  
+\end{longtable}
+\end{center}
+
+	
+En la tabla 2 se muestran los constituyentes armónicos mayores\cite{a}:
+\begin{center}
+	\begin{longtable}{|p{2.7cm}|c|c|c|c|c|c|c|c|c|c|c|c|c}
+  	\hline
+Armónico mayor & Darwin & Periodo & Velocidad & \multicolumn{4}{c}{Coeficientes Doodson} & Doodson &  NOAA \\
+\hline
+Nombre & Simbolo & (hr) & ($^o$/hr) & $n_{1}$ (L) & $n_{1}$ (m) &	$n_{3}$ (y) &	$n_{4}$ (mp) & Número  & Orden\\
+\hline
+Sobremarea principal superficial lunar
+& $M_{4}$ &	6.21 & 	57.97 &	4 & & & &  455.555 & 5\\
+Sobremarea principal superficial lunar* & 	$M_{6}$ 	& 4.14& 	86.95 & 	6 & & & & 655.555 & 7 \\
+Marea superficial terdiurna &
+$MK_{3}$ & 	8.18 &	44.03 &	3 &	1 & & & 365.555 & 8 \\
+Principal sobremarea superficial solar & S$_{4}$ &	6 &	60 &	4 &	4 &	-4 & & 491.555 & 9 \\
+Superficial diurno cuarto &	MN$_4$ &	6.27 &	57.42 &	4 &	-1 & & 1 &	445.655 & 10\\
+
+    \hline
+\caption{Constituyentes armónicos mayores}  
+\end{longtable}
+\end{center}
+
+Por ultimo la tabla 3 presenta los constituyentes diurnos principales\cite{a}:
+\begin{center}
+	\begin{longtable}{|p{2.7cm}|c|c|c|c|c|c|c|c|c|c|c|c|c}
+  	\hline
+Diurno & Darwin & Periodo & Velocidad & \multicolumn{4}{c}{Coeficientes Doodson} & Doodson &  NOAA \\
+\hline
+Nombre & Simbolo & (hr) & ($^o$/hr) & $n_{1}$ (L) & $n_{1}$ (m) &	$n_{3}$ (y) &	$n_{4}$ (mp) & Número  & Orden\\
+\hline
+Lunar diurno & 	K$_1$ & 	23.93 & 	15.04 & 	1 &	1 & & & 165.555 & 4\\
+Lunar diurno &	O$_1$ &	25.82 & 	13.94 &	1 &	-1 & & & 145.555 & 6 \\
+    \hline
+\caption{Constituyentes diurnos principales}  
+\end{longtable}
+\end{center}
+
+Los coeficientes de Doodson están dados por\cite{e}:
+
+\begin{itemize}
+\item $n_1$ es el tiempo medio lunar, la hora del angulo Greenwich de la media de la luna mas 12 horas. En forma de ecuación es:
+\begin{equation}
+n_{1} = \tau = \theta_{M} + \pi - s
+\end{equation}
+\item $n_2$ es la longitud media de la luna, esta dado por:
+\begin{equation}
+n_{2} = \delta = F + \Omega
+\end{equation}
+\item $n_3$ es la longitud media del sol, se calcula como: 
+\begin{equation}
+n_{3} = h = s-D
+\end{equation}
+\item $n_4$ es la longitud media de la luna en perigeo, es:
+\begin{equation}
+n_{4} = p = s - l
+\end{equation}
+\end{itemize}
+
+Donde\cite{e}:
+\begin{itemize}
+\item l es la anomalía media de la luna (distancia desde su perigeo).
+\item F es el argumento de latitud medio de la luna (distancia desde su nodo).
+\item D es la elongación media de la luna (distancia desde el sol).
+\item $\Omega$ es la longitud media del nodo elíptico ascendiente de la luna.
+\end{itemize}
+
+
+
+\section{Marea en Manzanillo, Colima (diciembre 2016)}
+
+Para graficar los datos de Manzanillo primero se uso un código para arreglar la variable fecha (ya que viene separada por año, mes, dia, hora, para ponerlo en una variable se uso:
+\begin{verbatim}
+from datetime import datetime
+df['date']= df.apply(lambda x:datetime.strptime("{0} {1} {2} {3}".format(x[u'anio'],x[u'mes'], x[u'dia'], x[u'hora(utc)']), "%Y %m %d %H"),axis=1)
+\end{verbatim}
+
+Luego se eliminaron las columnas de mas, y se re ordenaron las columnas restantes (en el orden tiempo-altura), con los siguientes comandos:
+
+\begin{verbatim}
+df_short=df.drop(df.columns[[0,1,2,3]],axis=1)
+h=df_short.columns.tolist()
+
+h=h[-1:] + h[:-1]
+df_short=pd.DataFrame(df_short[h])
+\end{verbatim}
+
+Después se interpolo -hacer una función de la información- la información para hacerla uniforme (lo que suaviza la gráfica y elimina-crea datos faltantes) con:
+
+\begin{verbatim}
+import scipy
+a = df_short['altura(mm)'].astype(float).interpolate(method='spline', order=2)
+
+df_short['altura(mm)']= df_short['altura(mm)'].astype(float).interpolate(method='spline', order=2)
+
+df_short.set_index([u'date'],inplace=True)
+\end{verbatim}
+
+Por ultimo se grafico con el siguiente comando:
+
+\begin{verbatim}
+import matplotlib.pyplot as mplt
+
+
+
+x=df_short.plot()
+x.set_xlim(pd.Timestamp('2016-12-01 00:00:00'), pd.Timestamp('2016-12-31 23:00:00'))
+mplt.ylabel('Nivel de la marea(mm)')
+mplt.xlabel('Fecha')
+mplt.title('Nivel de la marea; Diciembre 2016 (Manzanillo, Colima)')
+mplt.legend(fancybox=True, shadow=True)
+mplt.grid(True)
+
+fig = mplt.gcf()
+fig.set_size_inches(13.5, 7.5)
+\end{verbatim}
+
+Lo que resulto en:
+
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{mnz}
+	\caption{Marea en Manzanillo, diciembre 2016}
+\end{figure}
+
+\section{Marea en la Isla Mona, Puerto Rico (diciembre 2016)}
+
+Para el caso de la isla Mona, la información ya venia con una variable de tiempo general por lo que solo se interpolo y se gráfico con:
+
+\begin{verbatim}
+import scipy
+a = df_short[u' Water Level'].astype(float).interpolate(method='spline', order=2)
+df_short.set_index([u'Date Time'],inplace=True)
+
+
+import matplotlib.pyplot as mplt
+df_short.plot()
+x.set_xlim(pd.Timestamp('2016-12-01  00:00'), pd.Timestamp('2016-12-31 23:54'))
+mplt.ylabel('Nivel de la marea(cm)')
+mplt.xlabel('Fecha')
+mplt.title('Nivel de la marea; Diciembre 2016 (Isla Mona, Puerto Rico)')
+mplt.legend(fancybox=True, shadow=True)
+mplt.grid(True)
+
+fig = mplt.gcf()
+fig.set_size_inches(13.5, 7.5)
+\end{verbatim}
+
+Lo que tuvo como resultado la siguiente gráfica:
+
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{mona}
+	\caption{Marea en Isla Mona, diciembre 2016}
+\end{figure}
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+Es interesante comenzar a entrar a una temática en especifico, mas por que es necesario conocer las características de la misma para poder manejar los datos de una forma apropiada. Ya que hacer ajustes de manera indiscriminada puede llevar a realizar errores que vienen de no conocer el fenómeno en particular.\\
+
+En especifico, la marea parece un fenómeno físicamente relevante ya que se comporta de forma ondulatoria y tiene un componente principal, aunque muchos otros constituyentes pueden entrar. Por lo que su análisis requiere adentrarse en la temática, en especial para hacer ajuste de una forma consiente y lógica.\\
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+
+\bibitem{a} Tide. Wikipedia: \url{https://en.wikipedia.org/wiki/Tide}
+\bibitem{b} Mareómetro. Wikipedia: \url{https://es.wikipedia.org/wiki/Mareómetro}
+\bibitem{c} Sea Level. Wikipedia: \url{https://en.wikipedia.org/wiki/Sea_level}
+\bibitem{d} Zona intermareal. Wikipedia: \url{https://es.wikipedia.org/wiki/Zona_intermareal}
+\bibitem{e} Arthur Thomas Doodson. Wikipedia: \url{https://en.wikipedia.org/wiki/Arthur_Thomas_Doodson}
+
+\end{thebibliography}
+
+
+\end{document}
