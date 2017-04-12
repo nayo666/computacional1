@@ -1,0 +1,599 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 7: Ajuste Fourier y Mareas}	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#7: Ajuste Fourier y Mareas con error relativo}\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+
+\begin{abstract}
+
+
+La presente actividad trata sobre la obtención de los principales constituyentes de la marea para la Isla Mona (Puerto Rico) y Manzanillo (México) mediante el uso de transformadas de Fourier. Para este caso se utilizan los datos para noviembre y diciembre del año 2016.
+
+
+\end{abstract}
+
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+En esta actividad comienzan a realizarse ajustes de datos sobre las mareas marea a través de las obtención de los constituyentes de la marea para Manzanillo en México y la Isla Mona en Puerto Rico. 
+Esto se realiza a través del uso de transformadas de Fourier para encontrar las funciones que componen la marea de estos lugares.\\
+
+
+La actividad se divide en 4 secciones (siendo la 1 la introducción). En la sección 2 se mencionan los principales constituyentes de la marea a manera de recordatorio.\\
+En la sección 3 se encuentran los constituyentes para Manzanillo usando una transformada de Fourier. \\
+En la 4 se realiza el mismo procedimiento para la Isla Mona.\\
+Las secciones 3 y 4 tienen subsecciones sobre el calculo del error relativo parar ambos casos.
+Por ultimo se tiene una sección de conclusiones.\\
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+
+\section{Constituyentes de la marea}
+
+Los constituyentes de la marea son el resultado neto de varios factores que afectan a la marea por periodos de tiempo en especifico, los principales son la rotación de la tierra, la posición de la luna y el sol, la altitud de la luna con respecto al ecuador y factores relativos a la profundidad del mar \cite{a}.
+Variaciones con periodos menores a 12 horas se llaman armónicos constituyentes y para periodos largos se refieren como constituyentes a largo plazo \cite{a}.\\
+
+A continuación se mencionan los principales constituyentes\cite{a}:
+
+\begin{itemize}
+\item Constituyente principal lunar semi-diurno: comúnmente el constituyente mayor y conocido como M2. Con un periodo de 12 horas t 25.2 minutos (tiempo de una rotación relativa de la tierra con respecto a la luna), este periodo es en e que el campo gravitacional de la luna esta a su máximo y mínima distancia.
+\item Rango semi-diurno: es la diferencia entre agua alta y baja en medio día (un ciclo de dos semanas normalmente entre la luna nueva y llena).
+\item Marea primaveral: se refiere al punto mas alto de la marea.
+\item Marea muerta: cuando la marea esta en su punto mínimo.
+\item Altitud lunar: cuando la luna esta a su mínima altura (ápside) el rango aumenta y cuando esta a su máxima altura (apsis) el rango disminuye.
+\item Fase y amplitud: Como el constituyente M2 es el dominante en la mayoría de los lugares, etapas o fases de la marea es un concepto útil. La fase de la marea se mide de forma angular (2$\pi$ o 360$^{o}$ para un ciclo completo).
+\item Otros constituyentes: factores como el campo gravitacional solar, la inclinación del ecuador y el eje rotacional, la inclinación del plano de la órbita de la luna y la forma orbital de la tierra con el sol.
+\end{itemize}
+
+En la siguiente tabla se resumen los constituyentes principales semidiurnos\cite{a}:
+\begin{center}
+	\begin{longtable}{|p{2.7cm}|c|c|c|c|c|c|c|c|c|c|c|c|c}
+  	\hline
+Semi-diurno & Darwin & Periodo & Velocidad & \multicolumn{4}{c}{Coeficientes Doodson} & Doodson &  NOAA \\
+\hline
+Nombre & Simbolo & (hr) & ($^o$/hr) & $n_{1}$ (L) & $n_{1}$ (m) &	$n_{3}$ (y) &	$n_{4}$ (mp) & Número  & Orden\\
+\hline
+Principal lunar semi-diurno & $M_{2}$ & 	12.42 	& 28.98 &	2 & & & & 255.55 & 1\\
+Principal solar semi-diurno & $S_{2}$ & 12 &	30 &	2 &	2 &	-2 & & 273.555 & 2 \\
+Semi-diurno elíptico lunar mayor &
+ 	$N_{2}$ &	12.66 &	28.44 &	2 &	-1 & &		1 &	245.655 & 3 \\
+    \hline
+\caption{Constituyentes principales semidiurnos}  
+\end{longtable}
+\end{center}
+
+	
+En la tabla 2 se muestran los constituyentes armónicos mayores\cite{a}:
+\begin{center}
+	\begin{longtable}{|p{2.7cm}|c|c|c|c|c|c|c|c|c|c|c|c|c}
+  	\hline
+Armónico mayor & Darwin & Periodo & Velocidad & \multicolumn{4}{c}{Coeficientes Doodson} & Doodson &  NOAA \\
+\hline
+Nombre & Simbolo & (hr) & ($^o$/hr) & $n_{1}$ (L) & $n_{1}$ (m) &	$n_{3}$ (y) &	$n_{4}$ (mp) & Número  & Orden\\
+\hline
+Sobremarea principal superficial lunar
+& $M_{4}$ &	6.21 & 	57.97 &	4 & & & &  455.555 & 5\\
+Sobremarea principal superficial lunar* & 	$M_{6}$ 	& 4.14& 	86.95 & 	6 & & & & 655.555 & 7 \\
+Marea superficial terdiurna &
+$MK_{3}$ & 	8.18 &	44.03 &	3 &	1 & & & 365.555 & 8 \\
+Principal sobremarea superficial solar & S$_{4}$ &	6 &	60 &	4 &	4 &	-4 & & 491.555 & 9 \\
+Superficial diurno cuarto &	MN$_4$ &	6.27 &	57.42 &	4 &	-1 & & 1 &	445.655 & 10\\
+
+    \hline
+\caption{Constituyentes armónicos mayores}  
+\end{longtable}
+\end{center}
+
+Por ultimo la tabla 3 presenta los constituyentes diurnos principales\cite{a}:
+\begin{center}
+	\begin{longtable}{|p{2.7cm}|c|c|c|c|c|c|c|c|c|c|c|c|c}
+  	\hline
+Diurno & Darwin & Periodo & Velocidad & \multicolumn{4}{c}{Coeficientes Doodson} & Doodson &  NOAA \\
+\hline
+Nombre & Simbolo & (hr) & ($^o$/hr) & $n_{1}$ (L) & $n_{1}$ (m) &	$n_{3}$ (y) &	$n_{4}$ (mp) & Número  & Orden\\
+\hline
+Lunar diurno & 	K$_1$ & 	23.93 & 	15.04 & 	1 &	1 & & & 165.555 & 4\\
+Lunar diurno &	O$_1$ &	25.82 & 	13.94 &	1 &	-1 & & & 145.555 & 6 \\
+    \hline
+\caption{Constituyentes diurnos principales}  
+\end{longtable}
+\end{center}
+
+Los coeficientes de Doodson están dados por\cite{e}:
+
+\begin{itemize}
+\item $n_1$ es el tiempo medio lunar, la hora del angulo Greenwich de la media de la luna mas 12 horas. En forma de ecuación es:
+\begin{equation}
+n_{1} = \tau = \theta_{M} + \pi - s
+\end{equation}
+\item $n_2$ es la longitud media de la luna, esta dado por:
+\begin{equation}
+n_{2} = \delta = F + \Omega
+\end{equation}
+\item $n_3$ es la longitud media del sol, se calcula como: 
+\begin{equation}
+n_{3} = h = s-D
+\end{equation}
+\item $n_4$ es la longitud media de la luna en perigeo, es:
+\begin{equation}
+n_{4} = p = s - l
+\end{equation}
+\end{itemize}
+
+Donde\cite{e}:
+\begin{itemize}
+\item l es la anomalía media de la luna (distancia desde su perigeo).
+\item F es el argumento de latitud medio de la luna (distancia desde su nodo).
+\item D es la elongación media de la luna (distancia desde el sol).
+\item $\Omega$ es la longitud media del nodo elíptico ascendiente de la luna.
+\end{itemize}
+
+
+
+\section{Constituyentes de la marea y ajuste Fourier en Manzanillo, Colima (noviembre y diciembre 2016)}
+
+En la siguiente imagen se muestra la marea para Manzanillo:
+
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{mnz}
+	\caption{Marea en Manzanillo, diciembre 2016}
+\end{figure}
+
+Para obtener los principales constituyentes de la marea se aplico transformada discreta de Fourier a los datos mostrados anteriormente pero para poder realizar esto, se tubo que crear una variable de tiempo continua (en horas) que cubriera la temporalidad en cuestión (noviembre y diciembre), esto se hizo con:
+
+\begin{verbatim}
+#indicador de tiempo
+df_short['month']=pd.DatetimeIndex(df_short[u'date']).month
+#noviembre
+df_nov=df_short.loc[df_short[u'month'] == 11]
+#diciembre
+df_dic=df_short.loc[df_short[u'month'] == 12]
+#juntar diciembre y noviembre
+df_23 = [df_nov, df_dic]
+df_nd = pd.concat(df_23)
+
+
+df_nov=df_short.loc[df_short[u'month'] == 11]
+df_dic=df_short.loc[df_short[u'month'] == 12]
+
+#novimebre
+import pandas as pd
+time_range = pd.date_range('2016-11-01 00:00:00','2016-11-30 23:00:00', freq='H')
+# podemos aun seleccionar un rango de días
+ 
+hours = time_range.hour
+days = time_range.day
+# Podemos calcular el número de horas transcurridas desde la fecha inicial
+nov_d = (days-1)*24+hours
+nov_d
+
+#diciembre
+import pandas as pd
+time_range = pd.date_range('2016-12-01 00:00:00','2016-12-31 23:00:00', freq='H')
+# podemos aun seleccionar un rango de días
+ 
+hours = time_range.hour
+days = time_range.day
+# Podemos calcular el número de horas transcurridas desde la fecha inicial
+dic_d= 720 + (days-1)*24+hours
+dic_d
+
+#crear variables de hora para cada caso
+df_nov['hour'] = nov_d
+df_dic['hour']= dic_d
+
+#unir las variables de hora en una variable
+df_23 = [df_nov['hour'], df_dic['hour']]
+df_nd['hour'] = pd.concat(df_23)
+
+\end{verbatim}
+
+Y se encontraron/graficaron la transformada discreta de Fourier con:
+
+\begin{verbatim}
+import matplotlib.pyplot as mplt
+fig = mplt.gcf()
+fig.set_size_inches(13.5, 7.5)
+
+
+import numpy as np
+from scipy.fftpack import rfft
+# Number of samplepoints
+N = 1464
+# sample spacing
+T = 1.0/732
+x = df_nd[u'hour']
+#eliminando la suma
+y = df_nd[u'altura(mm)']
+yf = rfft(y)
+xf = np.linspace(0.0, 1.0/(2.0*T), N/2)
+import matplotlib.pyplot as plt
+plt.plot(xf, 2.0/N * np.abs(yf[0:N/2]))
+plt.xlim(-5,130)
+plt.ylim(0,800)
+plt.grid()
+plt.show()
+\end{verbatim}
+
+Que resulto en:
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{mnzf}
+	\caption{Constituyentes de la marea en Manzanillo, diciembre 2016}
+\end{figure}
+
+En este caso obtenemos alrededor de 7 nodos significativos, los valores en el eje de las x nos indican el valor de 372/T en la sumatoria (viene de la definición de T=1/371 en el código.\\
+Para obtener los valores de la transformada se uso:
+
+\begin{verbatim}
+#Obtener valores de la funcion furrier por orden, en este caso de menor a mayor
+
+temp =  2.0/N * np.abs(yf[0:N/2])
+ 
+temp.sort()
+
+temp
+\end{verbatim}
+
+
+Los valores máximos obtenidos son:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c c|}
+\hline
+	&	Amplitud	&	n	\\
+    \hline
+a0	&	389.547706	&		\\
+a1	&	170.753539	&	61.5	\\
+a2	&	114.609969	&	124	\\
+a3	&	112.232966	&	120	\\
+a4	&	94.5109376	&	57.6	\\
+a5	&	52.7094677	&	57.8	\\
+a6	&	40.5105779	&	56.5	\\
+a7	&	29.3780067	&	55	\\
+a8	&	23.1170791	&	59	\\
+a9	&	2.00E+01	&	115.5	\\
+a10	&	2.00E+01	&	116.5	\\
+
+\hline
+\end{tabular}
+\caption{Principales constituyentes para Manzanillo}
+\end{table}
+
+Para calcular los valores de las frecuencias se utiliza la siguiente forma:
+
+\begin{equation}
+f(t) = \frac{a_{0}}{2} + \sum^{N}_{n=1} a_{n}sin\bigg(\frac{2\pi nt}{T} + \Phi_{n}\bigg)
+\end{equation}
+
+Donde el valor $a_{n}$ representa el valor del pico.\\
+Sin embargo, por la definición del código de Fourier se cambio el ciclo de 2$\pi$ a $\pi$, véase el espacio x del código:
+
+\begin{verbatim}
+xf = np.linspace(0.0, 1.0/(2.0*T), N/2)
+\end{verbatim}
+
+Entonces la ecuación queda:
+
+\begin{equation}
+f(t) = \frac{a_{0}}{2} + \sum^{N}_{n=1} a_{n}sin\bigg(\frac{\pi nt}{T} + \Phi_{n}\bigg)
+\end{equation}
+
+La forma de calcular para el primer nodo se da como (que esta en la posición 30.08):
+
+$$ f(t) = \frac{a_{0}}{2} + a_{1}sin\bigg(\frac{\pi t}{T}\bigg) + \sum^{N}_{n=2} a_{n}sin\bigg(\frac{\pi nt}{T} + \Phi_{n}\bigg) = 375.78 + 181.24sin\bigg(\frac{\pi t}{T}\bigg) + \sum^{N}_{n=2} a_{n}sin\bigg(\frac{\pi nt}{T} + \Phi_{n}\bigg)
+$$
+
+Sigue igualar:
+
+$$ \frac{372}{T}  = (30.08)$$
+
+Y por ende:
+
+$$ T_{1} = \frac{372}{30.08} =  12.37 h$$
+
+Para el constituyente $a_{2}$ tenemos:
+
+$$ f(t) = 375.78 + 181.24sin\bigg(\frac{\pi t}{T_1}\bigg) + 114.1sin\bigg(\frac{\pi t}{T_2}\bigg) + \sum^{N}_{n=3} a_{n}sin\bigg(\frac{\pi nt}{T} + \Phi_{n}\bigg)
+$$
+
+Y:
+
+$$ T_{2} = \frac{372}{62.17} =  5.98 h$$
+
+Siguiendo este procedimiento se pudieron obtener los componentes $T_{n}$ para los demás, estos se muestran en la siguiente tabla:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c c c c |}
+\hline
+	&	Amplitud	&	n	&	T (horas)	&	Constituyente	\\
+    \hline
+a0	&	389.547706	&		&		&		\\
+a1	&	170.753539	&	61.5	&	12.09756098	&	M2	\\
+a2	&	114.609969	&	124	&	6	&	M4	\\
+a3	&	112.232966	&	120	&	6.2	&	MN4	\\
+a4	&	94.5109376	&	57.6	&	12.91666667	&	S2	\\
+a5	&	52.7094677	&	57.8	&	12.87197232	&		\\
+a6	&	40.5105779	&	56.5	&	13.16814159	&		\\
+a7	&	29.3780067	&	55	&	13.52727273	&		\\
+a8	&	23.1170791	&	59	&	12.61016949	&		\\
+a9	&	2.00E+01	&	115.5	&	6.441558442	&		\\
+a10	&	2.00E+01	&	116.5	&	6.386266094	&		\\
+									
+
+\hline
+\end{tabular}
+\caption{Principales constituyentes para Manzanillo}
+\end{table}
+
+Por ultimo, la función para la marea en manzanillo queda como:
+
+\begin{equation}
+ \begin{split}
+& f(t) = 389.55 + 170.75sin\bigg(\frac{\pi t}{T_1}\bigg) + 114.61sin\bigg(\frac{\pi t}{T_2}\bigg) + 112.23sin\bigg(\frac{\pi t}{T_3}\bigg) + 94.51sin\bigg(\frac{\pi t}{T_4}\bigg) \\
+& + 52.71sin\bigg(\frac{\pi t}{T_5}\bigg) + 40.51sin\bigg(\frac{\pi t}{T_6}\bigg) + 29.38sin\bigg(\frac{\pi t}{T_7}\bigg) + 23.12sin\bigg(\frac{\pi t}{T_8}\bigg)  \\
+& 20sin\bigg(\frac{\pi t}{T_9}\bigg) + 
+20sin\bigg(\frac{\pi t}{T_10}\bigg) \\
+& f(t) = 389.55 + 170.75sin\bigg(\frac{\pi t}{12.1}\bigg) + 114.61sin\bigg(\frac{\pi t}{6}\bigg) + 112.23sin\bigg(\frac{\pi t}{6.2}\bigg) + 94.51sin\bigg(\frac{\pi t}{12.92}\bigg) \\
+& + 52.71sin\bigg(\frac{\pi t}{12.87}\bigg) + 40.51sin\bigg(\frac{\pi t}{13.17}\bigg) + 29.38sin\bigg(\frac{\pi t}{13.52}\bigg) + 23.12sin\bigg(\frac{\pi t}{12.61}\bigg)  \\
+& 20sin\bigg(\frac{\pi t}{6.44}\bigg) + 
+20sin\bigg(\frac{\pi t}{6.38}\bigg) \\
+\end{split}
+\end{equation}
+
+Finalmente se gráfico esta función contra los datos reales usando el codigo:
+
+\begin{verbatim}
+
+#funcion de fourier
+def f(t):
+ return 389.55 + (170.75)*np.sin(1*np.pi*t/12.1)  + (114.161)*np.sin(1*np.pi*t/6) 
+ 
+ + (112.23)*np.sin(1*np.pi*t/6.2) + (94.51)*np.sin(1*np.pi*t/12.92) +
+ 
+(52.71)*np.sin(1*np.pi*t/12.87) + (40.51)*np.sin(1*np.pi*t/13.16) +
+
+(29.38)*np.sin(1*np.pi*t/13.53) + (23.12)*np.sin(1*np.pi*t/12.61) +
+
+(20)*np.sin(1*np.pi*t/6.44) + (20.0)*np.sin(1*np.pi*t/6.39)    
+
+#interpolar la funcion
+df_nd[u'altura(mm)'] = df_nd[u'altura(mm)'].astype(float).interpolate(met
+
+hod='spline', order=2)
+
+fig = mplt.gcf()
+fig.set_size_inches(13.5, 7.5)
+
+mplt.plot(df_nd[u'hour'], f(df_nd[u'hour']), c='black', label='Ajuste Fourier')
+mplt.plot(df_nd[u'hour'], df_nd['altura(mm)'], c='red', label='Datos CICESE')
+
+
+mplt.ylabel('Nivel de la marea(mm)')
+mplt.xlabel('Hora')
+mplt.legend(fancybox=True, shadow=True)
+mplt.grid(True)
+\end{verbatim}
+
+Y resulto en:
+
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{mnzg}
+	\caption{Ajuste Fourier y datos de CICESE noviembre y diciembre 2017}
+\end{figure}
+
+
+\subsection{Error relativo para Manzanillo}
+
+En este caso el error relativo se calcula como\cite{c}:
+
+\begin{equation}
+Error-relativo = \frac{ \Sigma_{n=1}^{N}|y-y_{fou}|^{2} }{ \Sigma_{n=1}^{N}|y|^2 }
+\end{equation}
+
+Donde y es el valor real de marea en este caso y $y_{fou}$ es el valor de la marea ajustado con Fourier. El código para realizarlo es:
+
+\begin{verbatim}
+def f(t):
+ return 389.55 + (170.75)*np.sin(1*np.pi*t/12.1)  + (114.161)*np.sin(1*np.pi*t/6) +
+ 
+ (112.23)*np.sin(1*np.pi*t/6.2) + (94.51)*np.sin(1*np.pi*t/12.92) +
+ 
+ (52.71)*np.sin(1*np.pi*t/12.87) + (40.51)*np.sin(1*np.pi*t/13.16) +
+ 
+ (29.38)*np.sin(1*np.pi*t/13.53) + (23.12)*np.sin(1*np.pi*t/12.61) +
+ 
+ (20)*np.sin(1*np.pi*t/6.44) + (20.0)*np.sin(1*np.pi*t/6.39)    
+
+#interpolar la funcion
+df_nd[u'altura(mm)'] = df_nd[u'altura(mm)'].astype(float).interpolate(meth
+
+od='spline', order=2)
+
+
+#error relativo
+x =  (np.abs(df_nd[u'altura(mm)'] - f(df_nd[u'hour'])))**2
+y =  (np.abs(df_nd[u'altura(mm)']))**2
+
+er = x/y
+
+er.sum()
+\end{verbatim}
+
+Y el resultado fue de:
+$$ Error-relativo = 176556.85$$
+
+\section{Constituyentes de la marea y ajuste Fourier en la Isla Mona, Puerto Rico (noviembre y diciembre 2016)}
+
+La siguiente figura muestra la marea para la Isla Mona.
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{mona}
+	\caption{Marea en Isla Mona, diciembre 2016}
+\end{figure}
+
+En la siguiente figura se ve la aplicación de la transformada de Fourier para la Isla Mona:
+
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{monaf}
+	\caption{Constituyentes de la marea en la Isla Mona, diciembre 2016}
+\end{figure}
+
+En la siguiente tabla se el proceso de la sección anterior para la Isla Mona:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c c c c|}
+\hline
+	&	Amplitud (metros)	&	n	&	T (hora)	&	Constituyente	\\
+    \hline
+
+a0	&	0.21531011	&		&		&		\\
+a1	&	0.084450193	&	61.8	&	12.03883495	&	M2	\\
+a2	&	0.041920013	&	57.8	&	12.87197232	&	S2	\\
+a3	&	0.019531866	&	57.3	&	12.98429319	&	N2	\\
+a4	&	0.012848187	&	56.3	&	13.21492007	&		\\
+a5	&	0.012765334	&	120	&	6.2	&	MN3	\\
+a6	&	0.012740746	&	123.9	&	6.004842615	&	M4	\\
+a7	&	0.011513145	&	59.3	&	12.54637437	&		\\
+a8	&	0.010818659	&	64	&	11.625	&		\\
+a9	&	0.009200942	&	63	&	11.80952381	&		\\
+a10	&	0.007870824	&	60	&	12.4	&		\\
+
+
+\hline
+\end{tabular}
+\caption{Principales constituyentes para la Isla Mona}
+\end{table}
+
+Y la función queda como:
+
+\begin{equation}
+ \begin{split}
+& f(t) = 0.22 + 0.0845sin\bigg(\frac{\pi t}{12.04}\bigg) + 0.0419sin\bigg(\frac{\pi t}{12.87}\bigg) + 0.0195sin\bigg(\frac{\pi t}{12.98}\bigg)  \\
+& + 0.0128sin\bigg(\frac{\pi t}{13.21}\bigg) + 0.0128sin\bigg(\frac{\pi t}{6.2}\bigg)) + 0.0127sin\bigg(\frac{\pi t}{6}\bigg)  \\
+& + 0.0115sin\bigg(\frac{\pi t}{12.55}\bigg))
++ 0.0108sin\bigg(\frac{\pi t}{11.63}\bigg)) + 0.0092sin\bigg(\frac{\pi t}{11.81}\bigg)) + 0.0079sin\bigg(\frac{\pi t}{12.4}\bigg)) \\
+\end{split}
+\end{equation}
+
+Y la gráfica de la función contra los datos reales resulto en:
+
+\begin{figure}[H]
+	\centering	\includegraphics[height=9cm]{monag}
+	\caption{Ajuste Fourier y datos de NOOA noviembre y diciembre 2017}
+\end{figure}
+
+\subsection{Error relativo para la Isla Mona}
+
+Para el caso de la Isla Mona el codigo que se utilizo fue:
+
+\begin{verbatim}
+def f(t):
+ return 0.2153 + (0.0845)*np.sin(np.pi*t/12.04)  + (0.0419)*np.sin(np.pi*t/12.87) +
+ 
+ (0.0195)*np.sin(np.pi*t/12.98) + (0.0128)*np.sin(np.pi*t/13.21) +
+ 
+ (0.01277)*np.sin(np.pi*t/6.2) + (0.0127)*np.sin(np.pi*t/6)  +
+ 
+ (0.0115)*np.sin(np.pi*t/12.55) + (0.0108)*np.sin(np.pi*t/11.63) +
+ 
+ (0.0092)*np.sin(np.pi*t/11.81) + (0.0079)*np.sin(np.pi*t/12.4)    
+
+#interpolar la funcion
+df_nd[u' Water Level'] = df_nd[u' Water Level'].astype(float).interpolate(meth
+
+od='spline', order=2)
+
+#error relativo
+x =  (np.abs(df_nd[u' Water Level'] - f(df_nd[u'hour']) ))**2
+y =  (np.abs(df_nd[u' Water Level']))**2
+
+er = x/y
+
+er.sum()
+#evitar error infinito
+np.ma.masked_invalid(er).sum()
+\end{verbatim}
+
+En este caso se agrego el ultimo código para eliminar un error que mandaba a infinito la sumatoria. Al final el error relativo fue de:
+
+$$ Error-relativo = 40407.85$$
+
+Se puede observar que el error es menor para este caso que para el anterior, es decir que se encontró un mejor ajuste para la Isla Mona que para Manzanillo.
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+El uso de la transformada de Fourier para encontrar los constituyentes de un comportamiento ondulatorio parece ser muy útil. Sin embargo su uso resulto complicado mas allá de aplicar el código, ya que el encontrar las frecuencias de cada onda fue lo que me resulto mas difícil. Sin embargo esto puede tener como origen el no estar del todo familiarizado con la aplicación de las transformadas de Fourier.\\
+Se encontró que dependiendo del numero de observaciones (meses en este caso) que se tengan cambia la precisión del ajuste.\\
+Ademas, se tiene que para el caso de la Isla Mona el error relativo es menor lo que lo hace un menor ajuste. Hecho que también se puede observar en las gráficas.
+
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+
+\bibitem{a} Tide. Wikipedia: \url{https://en.wikipedia.org/wiki/Tide}
+\bibitem{b} Fourier Series. Wikipedia: \url{https://en.wikipedia.org/wiki/Fourier_series}
+\bibitem{e} Arthur Thomas Doodson. Wikipedia: \url{https://en.wikipedia.org/wiki/Arthur_Thomas_Doodson}
+\bibitem{c} url{http://computacional1.pbworks.com/w/page/116715627/Actividad20720(2017-1)}
+
+\end{thebibliography}
+
+
+\end{document}
