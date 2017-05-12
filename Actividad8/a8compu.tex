@@ -1,0 +1,227 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 8: Atractores Extraños. El Efecto Mariposa. }	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#8: Atractores Extraños. El Efecto Mariposa. }\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+
+\begin{abstract}
+
+
+La presente practica trata sobre el planteamiento y revolvimiento de sistemas de Lorenz o atractores de Lorenz usando códigos de Python que por una lado resuelven el sistema de ecuaciones diferenciales y por otro graficán las soluciones.
+
+\end{abstract}
+
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+Los atractores de Lorenz son la solución "caótica" de un sistema de ecuaciones diferenciales donde se tienen las variables, parámetros del sistema y valores iniciales.\\
+En la presenta actividad se plantean de manera general en que consisten los sistemas de Lorenz, seguido por características para casos en especifico de los sistemas.\\
+
+Luego se graficán 5 casos de los atractores de Lorenz usando un código elaborado por \cite{c} que permite primeramente resolver el sistema de ecuación de Lorenz y graficar los resultados (se graficán para diferentes valores de los parámetros $\rho$, $\sigma$ y $\beta$.\\
+
+Por ultimo se elabora un gif que muestra la evolución de un atractor de Lorenz usando el código de \cite{d} y Python 3.6. Ademas, se presenta un mp4 con el código de \cite{e} y Python 2.7. Ambos archivos se adjuntan al Github.
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+
+\section{Sistema de Lorenz}
+
+
+El sistema de Lorenz se refiere a un sistema de ecuaciones diferenciales estudiado por Edward Lorenz \cite{a}. El sistema brindo soluciones caóticas para sistemas dinámicos que están condicionados por ciertos valores iniciales y parámetros constantes \cite{a}.
+De forma especifica, las soluciones del sistema dinámico (también llamado atractor de Lorenz), es un conjunto de soluciones caoticas que cuando se grafican se asemejan a una mariposa o el numero ocho \cite{a}. \\
+
+Un ejemplo del sistema de ecuaciones de Lorenz, en este caso de un modelo simplificado para la convección atmosférica es\cite{a}:
+
+\begin{equation}
+\frac{dx}{dt} = \sigma (y-x) 
+\end{equation}
+\begin{equation}
+\frac{dy}{dt} = x(\rho - z) - y
+\end{equation}
+\begin{equation}
+\frac{dz}{dt} = xy - \beta z
+\end{equation}
+
+Los valores de x, y y z son las propiedades/estado del sistema; t es el tiempo y $\sigma$, $\rho$ y $\beta$ son parámetros del sistema \cite{a}.\\
+
+\subsection{Análisis del Sistema de Lorenz}
+
+Normalmente se asumen que los parámetros $\sigma$, $\rho$ y $\beta$ son positivos \cite{a}. Dependiendo de los valores que se les de a los parámetros el sistema puede exhibir comportamiento caótico en distintos grados. Por ejemplos:
+
+\begin{itemize}
+\item Lorenz estudio los valores de $\sigma$=10, $\rho$=28 y $\beta$ = $\frac{8}{3}$ donde el sistema tiene comportamiento caotico para esto valores (y cercanos a ellos) \cite{a}.
+\item Si $\rho$ < 1, entonces solo existe un punto de equilibrio (el origen) que corresponde a la no convección \cite{a}. De esta forma se dice que todas las órbitas convergen al origen (siendo este el atractor global).
+\item Para $\rho$ = 1 y $\rho$ > 1 se tienen dos puntos críticos que son respectivamente:
+$$\bigg( \sqrt[]{\beta(\rho - 1)},\sqrt[]{\beta(\rho - 1)} , \rho - 1 \bigg)$$
+
+$$\bigg( -\sqrt[]{\beta(\rho - 1)},-\sqrt[]{\beta(\rho - 1)} , \rho - 1 \bigg)$$
+
+Estos corresponden a una convección suave, y dichos puntos son estables solo si se cumple:
+$$ \rho < \sigma \frac{\sigma + \beta + 3}{\sigma - \beta - 1}$$
+Que solo puede tener valores de $\rho$ positivos si  $\sigma$ > ($\beta$+1); en el valor critico los dos puntos de equilibrio pierden estabilidad por la Bifurcación de Hopf que sucede cuando la solución pierde estabilidad y se requiere una solución periódica en su lugar \cite{b}.
+\end{itemize}
+
+Ejemplos de las soluciones del sistema de Lorenz para distintos valores de $\rho$ se pueden ver en la siguiente imagen:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{uno}
+	\caption{Atractor de Lorez para $\sigma$=10, $\rho$=28, $\beta$=2.667}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{dos}
+	\caption{Atractor de Lorez para $\sigma$=10, $\rho$=14, $\beta$=2.667}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{tres}
+	\caption{Atractor de Lorez para $\sigma$=10, $\rho$=13, $\beta$=2.667}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{quatre}
+	\caption{Atractor de Lorez para $\sigma$=10, $\rho$=15, $\beta$=2.667}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{cinq}
+	\caption{Atractor de Lorez para $\sigma$=10, $\rho$=28, $\beta$=2.667}
+\end{figure}
+
+Las imágenes anteriores se hicieron usando el código:
+\begin{verbatim}
+# Plot of the Lorenz Attractor based on Edward Lorenz's 1963 "Deterministic
+# Nonperiodic Flow" publication.
+# http://journals.ametsoc.org/doi/abs/10.1175/1520-0469%281963%29020%3C0130%3ADNF%3E2.0.CO%3B2
+#
+# Note: Because this is a simple non-linear ODE, it would be more easily
+#       done using SciPy's ode solver, but this approach depends only
+#       upon NumPy.
+
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+
+def lorenz(x, y, z, s=10, r=28, b=2.667):
+    x_dot = s*(y - x)
+    y_dot = r*x - y - x*z
+    z_dot = x*y - b*z
+    return x_dot, y_dot, z_dot
+
+
+dt = 0.01
+stepCnt = 10000
+
+# Need one more for the initial values
+xs = np.empty((stepCnt + 1,))
+ys = np.empty((stepCnt + 1,))
+zs = np.empty((stepCnt + 1,))
+
+# Setting initial values
+xs[0], ys[0], zs[0] = (0., 1., 1.05)
+
+# Stepping through "time".
+for i in range(stepCnt):
+    # Derivatives of the X, Y, Z state
+    x_dot, y_dot, z_dot = lorenz(xs[i], ys[i], zs[i])
+    xs[i + 1] = xs[i] + (x_dot * dt)
+    ys[i + 1] = ys[i] + (y_dot * dt)
+    zs[i + 1] = zs[i] + (z_dot * dt)
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+ax.plot(xs, ys, zs, lw=0.5)
+ax.set_xlabel("X Axis")
+ax.set_ylabel("Y Axis")
+ax.set_zlabel("Z Axis")
+ax.set_title("Lorenz Attractor")
+
+plt.show()
+\end{verbatim}
+
+
+Ademas, se usaron los codigos proporcionados por \cite{d} y \cite{e} para realizar un gif y un mp4 del comportamiento del atractor de Lorenz en el tiempo. Para el primero se uso Python 2.7 mientras para el segundo Python 3.6. El vídeo y el gif están adjuntos en la carpeta de Github.
+
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+La actividad resulto muy interesante primeramente por que se tiene en mano códigos para resolver sistemas de ecuaciones diferenciales y segundo por que los sistemas caóticos me parecen interesantes, aparte de que son apreciables de observar.\\
+Ademas, el poder crear un mp4 y gif que muestre la evolución de las soluciones del sistema en el tiempo no solo es bonito de ver sino que puede resultar útil para simular toda clase de problemas (que me parece una habilidad importante).
+
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+
+\bibitem{a} Lorenz system. Wikipedia: \url{https://en.wikipedia.org/wiki/Lorenz_system}
+\bibitem{b} Hopf bifurcation. Wikipedia: \url{https://en.wikipedia.org/wiki/Hopf_bifurcation}
+\bibitem{c} Matplotlib. mplot3d example code, Lorenz atractor: \url{https://matplotlib.org/2.0.0/examples/mplot3d/lorenz_attractor.html}
+\bibitem{d}  Gboeing. Lorenz System: \url{https://github.com/gboeing/lorenz-system} 
+\bibitem{e} Jake VanderPlas. Animating the Lorenz System in 3D: \url{https://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/}
+
+\end{thebibliography}
+
+
+\end{document}
