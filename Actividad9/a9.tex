@@ -1,0 +1,189 @@
+%---------Definición de paquetes base--------------
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs} % Required for nicer horizontal rules in tables
+\usepackage[spanish, es-tabla, es-nodecimaldot]{babel}		%Separacion silabica espanola
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\usepackage{multicol}	% Para manejar columnas múltiples
+\usepackage{longtable}  % Para manejar tablas de varias paginas con encabezado
+		\newenvironment{Table}
+		{\par\medskip\noindent\minipage{\linewidth}}
+		{\endminipage\par\medskip}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de pagina
+		\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\usepackage{wrapfig}	% Necesario para la rubrica de evaluación
+%--------Encabezado y pie de página---------------------
+\lhead{Computacional I}
+\chead{}
+\rhead{Actividad 9: Teoría del Caos y el Mapeo Logístico. }	% va el numero de experimento, al igual que en el titulo
+\lfoot{Lic. en Física}
+\cfoot{\thepage\ }
+\rfoot{Universidad de Sonora}
+%-----------Portada---------------------------------------------
+\author{
+Leonardo Coronado Arvayo\\
+Profesor: Carlos Lizárraga Celaya   \vspace*{1.25in}}
+\title{	\includegraphics[width=3cm]{Logo} \\
+Universidad de Sonora \\
+{\small Departamento de Física \\
+Licenciatura en Física \\
+Computacional I \\
+2017-1 \\
+\vspace{0.55in} Reporte}\\ 
+{\Huge Actividad \#9: Teoría del Caos y el Mapeo Logístico. }\\
+\vspace*{1.0in}}
+%-----------Reporte----------------------------
+%	Portada y tabla de contenidos
+\begin{document}
+	\pagenumbering{gobble} % Remove page numbers (and reset to 1)
+	\maketitle
+\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+\pagebreak
+%====================================================================================================
+%=================================================Resumen==========================================
+%====================================================================================================
+
+\begin{abstract}
+
+El presente reporte trata sobre el mapeo logístico que es un ejemplo de como el comportamiento caótico puede resultar del crecimiento dado en ecuaciones dinámicas simples no-lineales. Se usa el modulo Pynamical \cite{b} de Python para graficar distintas formas de este comportamiento (como lo son el diagrama de bifurcación, diagrama de fase de mapeo logístico, mapas en 3D del atractor logístico, mapeo logistico por tasas de crecimiento y por condiciones iniciales).
+
+
+\end{abstract}
+
+
+%====================================================================================================
+%=================================================Introducción=======================================
+%====================================================================================================
+\section{Introducción}
+
+El mapeo logístico es un ejemplo de como comportamiento caótico/complejo se origina del crecimiento de ecuaciones dinámicas simples no-lineales\cite{a}. El mapeo logístico se define matemáticamente como:
+
+$$x_{n+1} = r*x_{n}*(1-x_{n}) $$
+
+Donde $X_{n}$ es un numero entre cero y uno que representa la proporción de la población actual con la máxima población posible \cite{a}. El valor de interés para el paramento r esta en el intervalo [o,4] \cite{a}. La ecuación no lineal presentada anteriormente intenta capturar dos efectos \cite{a}:
+
+\begin{itemize}
+\item Reproducción donde la población se incrementa a una tasa proporcional a la población actual cuando el tamaño de la población es pequeño.
+\item Hambruna (densidad dependiente de la mortalidad) donde las tasas de crecimiento decrecen proporcionalmente con el valor obtenido teóricamente de las capacidades del ambiente para soportar a la población actual.
+\end{itemize}
+
+Como modelo demográfico, el modelo logístico tiene el problema de que los valores iniciales y de los parámetros llevan a cantidades negativas, problema que no aparece en otros modelos (aunque también presentan dinámica caótica) \cite{a}.\\
+Una descripción burda de sistemas caóticos es que presentan una gran sensibilidad a valores iniciales, que es el caso del mapeo logístico para casi todos los valores de $\rho$ -tasas de crecimiento de la población en cuestión- \cite{a}.
+
+%====================================================================================================
+%============================================Desarrollo==============================================
+%====================================================================================================
+
+
+\section{Mapeo logístico}
+
+En esta sección se verán diagramas, mapas en 2D y 3D que muestran como es el comportamiento caótico de los mapas logísticos. Los códigos de Python fueron tomados de \cite{b} y se adjunto el archivo donde se corrieron los códigos. \\
+El primer diagrama es un diagrama de Bifurcación relacionando las tasas de crecimiento con la población, que se ve:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{uno}
+	\caption{Para tasas de crecimiento hasta 4.0}
+\end{figure}
+
+Como se ve en la figura anterior el diagrama es para tasas crecimiento de la población de 0 hasta 4. En la siguiente figura se gráfica solo para las tasas de crecimiento entre 3.4 y 4:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{dos}
+	\caption{Para tasas de crecimiento entre 3.4 y 4.0}
+\end{figure}
+
+Después se gráfica un diagrama de fase del mapa logístico que relaciona la población en un periodo t contra la población en un periodo siguiente, esta se ve como:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{tres}
+	\caption{}
+\end{figure}
+
+Este comportamiento, si se le agrega un periodo t+2 se pasa a la tercera dimensión como el mata de atractor logístico que se puede observar en la siguiente figura:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=11cm]{quatre}
+	\caption{}
+\end{figure}
+
+Girándolo 90 grados queda:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=11cm]{cinq}
+	\caption{}
+\end{figure}
+
+
+
+\section{Tasas de crecimiento del mapeo logístico}
+
+
+Después se paso a graficar las relación de generación y población para distintas tasas de crecimiento. En la siguiente figura se ben estas para tasas entre 1.2 y 3.5, donde se ve que a mayor tasa de crecimiento las relaciones se vuelven mas caóticas.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{tc1}
+	\caption{ entre tasas de 1.5 a 3.5}
+\end{figure}
+
+En la siguiente gráfica se ven los cambios entre la relación de población y generación para tasas de crecimiento de 3.9 y 3.0001. Se observa que para las primeras 15-20 generaciones las tasas de crecimiento son similares pero a partir de  la 20 comienzan a diferenciarse.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{tc2}
+	\caption{Para variaciones minúsculas (1)}
+\end{figure}
+
+En la siguiente figura se ve una gráfica similar pero para valores iniciales de 0.5 y 0.50001, y con una tasas de crecimiento de 3.9, para este caso los cambios en las tasas de crecimiento se diferencian a partir de las 30 generaciones.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{tc3}
+	\caption{Para variaciones minúsculas (2)}
+\end{figure}
+
+Por ultimo se tiene una gráfica con las mismas condiciones iniciales que la anterior pero con una tasa de crecimiento de 3.65, donde se puede observar que para este caso los valores no parecen diferenciarse.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=9cm]{set}
+	\caption{Para variaciones minúsculas (3)}
+\end{figure}
+
+%====================================================================================================
+%================================================Conclusiones==========================================
+%====================================================================================================
+\section{Conclusiones} 
+
+Los atractores son bonitos, aprender a gratificarlos es interesante, mas por ser gráficas que pueden apreciarse en distintas dimensiones y en diversas formas.\\
+Aprender un poco sobre el crecimiento logístico también resulto interesante, así como aprender que el comportamiento caótico puede salir de sistemas simples.
+
+
+%====================================================================================================
+%===============================================Referencias==========================================
+%====================================================================================================
+\begin{thebibliography}{2}
+
+\bibitem{a} Sistema Logístico. Wikipedia: \url{https://en.wikipedia.org/wiki/Logistic_map}
+
+\bibitem{b} Gboeing. Module Pynamical: \url{https://github.com/gboeing/pynamical}
+\end{thebibliography}
+
+
+\end{document}
